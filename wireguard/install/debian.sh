@@ -65,6 +65,6 @@ export DEBIAN_FRONTEND=noninteractive
 runcmd 'apt-get install -y --no-install-recommends wireguard-tools'
 
 # Enable IP-forwarding
-info "Enable IP-forwarding..."
+log "Enable IP-forwarding..."
 sed -i "s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g" /etc/sysctl.conf
 sysctl -p
