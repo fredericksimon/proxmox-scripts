@@ -126,7 +126,15 @@ echo ""
 
 sleep 10
 
-# Download latest Alpine LXC template
+# Install the kernel headers and wireguard to pve
+info "Installing kernel headers..."
+apt -y install pve-headers wireguard
+
+# Enable the kernel module
+modprobe wireguard
+if ! grep -Fxq "wireguard" /etc/modules-load.d/modules.conf; then echo "wireguard" >> /etc/modules-load.d/modules.conf; fi
+
+# Download latest LXC template
 info "Updating LXC template list..."
 pveam update &>/dev/null
 
@@ -186,6 +194,8 @@ pct create $_ctid "$_storage_template:vztmpl/$_template" ${_pct_options[@]} &>/d
 # Set container timezone to match host
 cat << 'EOF' >> /etc/pve/lxc/${_ctid}.conf
 lxc.hook.mount: sh -c 'ln -fs $(readlink /etc/localtime) ${LXC_ROOTFS_MOUNT}/etc/localtime'
+lxc.cgroup2.devices.allow: c 10:200 rwm
+lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file
 EOF
 
 # Setup container
