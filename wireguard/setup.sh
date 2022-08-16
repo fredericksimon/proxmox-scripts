@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-TMP=/tmp/npm_install.sh
+TMP=/tmp/wiregard_install.sh
 URL=https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/wireguard/install
 
 if [ "$(uname)" != "Linux" ]; then

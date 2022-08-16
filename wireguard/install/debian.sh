@@ -64,9 +64,6 @@ runcmd apt-get update
 export DEBIAN_FRONTEND=noninteractive
 runcmd 'apt-get install -y --no-install-recommends wireguard-tools'
 
-
-
-
 # Enable IP-forwarding
 info "Enable IP-forwarding..."
 sed -i "s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g" /etc/sysctl.conf
@@ -79,26 +76,3 @@ umask 077
 wg genkey | tee /etc/wireguard/server-privatekey | wg pubkey > /etc/wireguard/server-publickey
 wg genkey | tee /etc/wireguard/iphone-privatekey | wg pubkey > /etc/wireguard/iphone-publickey
 
-cat << 'EOF' > /etc/wiregard/wg0.conf
-[Interface]
-PrivateKey = <server-privatekey> # la clé privée du serveur
-Address = 10.0.0.1 # l'adresse du sous réseau
-PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
-ListenPort = 51820 # le port d'écoute par défaut
-
-[Peer]
-# Iphone
-PublicKey = <iphone-publickey> # la clé publique de l'iphone
-AllowedIPs = 10.0.0.2/32 # l'adresse IP que Wireguard lui allouera sur le sous réseau
-PersistentKeepalive = 25 # utile lorsque vous êtes derrière un NAT ou un pare-feu
-EOF
-
-
-IP=$(hostname -I | cut -f1 -d ' ')
-log "Installation complete
-
-\e[0mNginx Proxy Manager should be reachable at the following URL.
-
-      http://${IP}:81
-"
