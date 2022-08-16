@@ -74,7 +74,7 @@ runcmd 'sysctl -p'
 log "Setting up wiregard enviroment"
 _wg_server_private=`wg genkey`
 log "Clé privée : $_wg_server_private"
-_wg_server_public="wg pubkey < $_wg_server_private"
+_wg_server_public=`echo "$_wg_server_private" | wg pubkey`
 eval $_wg_server_public
 log "Clé public : $_wg_server_public"
 
