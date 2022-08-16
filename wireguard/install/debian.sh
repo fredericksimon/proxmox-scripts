@@ -76,8 +76,11 @@ wg genkey | tee /etc/wireguard/server-privatekey
 wg pubkey > /etc/wireguard/server-publickey
 wg genkey | tee /etc/wireguard/iphone-privatekey | wg pubkey > /etc/wireguard/iphone-publickey
 
-_wg_server_private=`wg genkey`
-_wg_server_public=`echo $_wg_server_private | wg pubkey`
+_wg_server_private=''
+_wg_server_public=''
+
+wg genkey | tee $_wg_server_private | wg pubkey > $_wg_server_public
+
 
 echo "[Interface]\nPrivateKey = $_wg_server_private # la clé privée du serveur\nAddress = 10.206.0.1 # l'adresse du sous réseau\nPostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\nPostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\nListenPort = 51820 # le port d'écoute par défaut" > /etc/wiregard/wg0.conf
 
