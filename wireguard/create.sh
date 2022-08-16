@@ -32,6 +32,7 @@ function error {
 
 # Base raw github URL
 _raw_base="https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/wireguard"
+
 # Operating system
 _os_type=debian
 _os_version=11
@@ -201,5 +202,5 @@ EOF
 # Setup container
 info "Setting up LXC container..."
 pct start $_ctid
-sleep 3
+sleep 5
 pct exec $_ctid -- sh -c "wget --no-cache -qO - $_raw_base/setup.sh | sh"

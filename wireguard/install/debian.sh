@@ -60,6 +60,6 @@ echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 locale-gen en_US.UTF-8
 
-runcmd apt-get update
+runcmd 'apt-get update'
 export DEBIAN_FRONTEND=noninteractive
 runcmd 'apt-get install -y --no-install-recommends wireguard-tools'
