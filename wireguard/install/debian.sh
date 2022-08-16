@@ -78,9 +78,7 @@ _wg_server_public=`echo "$_wg_server_private" | wg pubkey`
 eval $_wg_server_public
 log "Clé public : $_wg_server_public"
 
-echo "[Interface]\nPrivateKey = $_wg_server_private # la clé privée du serveur\nAddress = 10.206.0.1 # l'adresse du sous réseau\nPostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\nPostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\nListenPort = 51820 # le port d'écoute par défaut" > /etc/wiregard/wg0.conf
-
-
+echo "[Interface]\nPrivateKey = $_wg_server_private # la clé privée du serveur\nAddress = 10.206.0.1 # l'adresse du sous réseau\nPostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\nPostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\nListenPort = 51820 # le port d'écoute par défaut" > /etc/wireguard/wg0.conf
 
 echo "Clé privée : $_wg_server_private\nClé public : $_wg_server_public" > /etc/wireguard/server-key
 
