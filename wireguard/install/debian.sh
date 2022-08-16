@@ -55,10 +55,10 @@ trapexit() {
 # Install dependencies
 log "Installing dependencies"
 
-runcmd echo "LC_ALL=en_US.UTF-8" >> /etc/environment
-runcmd echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
-runcmd echo "LANG=en_US.UTF-8" > /etc/locale.conf
-runcmd locale-gen en_US.UTF-8
+echo "LC_ALL=en_US.UTF-8" >> /etc/environment
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+locale-gen en_US.UTF-8
 
 runcmd apt-get update
 export DEBIAN_FRONTEND=noninteractive
