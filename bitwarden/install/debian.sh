@@ -13,7 +13,7 @@ WGETOPT="-t 1 -T 15 -q"
 DEVDEPS="git build-essential libffi-dev libssl-dev python3-dev"
 
 # Base raw github URL
-_raw_base="https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/wireguard"
+_raw_base="https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/bitwarden"
            
 cd $TEMPDIR
 touch $TEMPLOG
@@ -64,34 +64,28 @@ locale-gen en_US.UTF-8
 
 runcmd 'apt-get update'
 export DEBIAN_FRONTEND=noninteractive
-runcmd 'apt-get install -y --no-install-recommends wireguard-tools iptables'
 
-# Enable IP-forwarding
-log "Enable IP-forwarding..."
-runcmd 'sed -i "s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g" /etc/sysctl.conf'
-runcmd 'sysctl -p'
+# # On configure wireguard
 
-# On configure wireguard
+# log "Setting up wiregard enviroment"
+# _wg_server_private=`wg genkey`
+# log "Clé privée : $_wg_server_private"
+# _wg_server_public=`echo "$_wg_server_private" | wg pubkey`
+# log "Clé public : $_wg_server_public"
 
-log "Setting up wiregard enviroment"
-_wg_server_private=`wg genkey`
-log "Clé privée : $_wg_server_private"
-_wg_server_public=`echo "$_wg_server_private" | wg pubkey`
-log "Clé public : $_wg_server_public"
+# # Récupération des fichiers de configuration
+# wget --no-cache -P /etc/wireguard $_raw_base/install/wg0.conf
+# sed -i 's,<server-privatekey>,'"$_wg_server_private"',g' /etc/wireguard/wg0.conf
 
-# Récupération des fichiers de configuration
-wget --no-cache -P /etc/wireguard $_raw_base/install/wg0.conf
-sed -i 's,<server-privatekey>,'"$_wg_server_private"',g' /etc/wireguard/wg0.conf
-
-wget --no-cache -P /etc/wireguard $_raw_base/install/server-key
-sed -i 's,<server-privatekey>,'"$_wg_server_private"',g' /etc/wireguard/server-key
-sed -i 's,<server-publickey>,'"$_wg_server_public"',g' /etc/wireguard/server-key
+# wget --no-cache -P /etc/wireguard $_raw_base/install/server-key
+# sed -i 's,<server-privatekey>,'"$_wg_server_private"',g' /etc/wireguard/server-key
+# sed -i 's,<server-publickey>,'"$_wg_server_public"',g' /etc/wireguard/server-key
 
 
-chown -R root:root /etc/wireguard
-chmod -R og-rwx /etc/wireguard
-systemctl enable wg-quick@wg0.service
-systemctl start wg-quick@wg0.service
+# chown -R root:root /etc/wireguard
+# chmod -R og-rwx /etc/wireguard
+# systemctl enable wg-quick@wg0.service
+# systemctl start wg-quick@wg0.service
 
 IP=$(hostname -I | cut -f1 -d ' ')
 log "Installation complete"
