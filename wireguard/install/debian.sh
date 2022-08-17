@@ -83,9 +83,9 @@ log "Clé public : $_wg_server_public"
 wget --no-cache -P /etc/wireguard $_raw_base/install/wg0.conf
 sed -i 's/<server-privatekey>/'"$_wg_server_private"'/g' /etc/wireguard/wg0.conf
 
-#wget --no-cache -P /etc/wireguard $_raw_base/install/server-key
-#sed -i 's/<server-privatekey>/$_wg_server_private/g' /etc/wireguard/wg0.conf
-#sed -i 's/<server-privatekey>/$_wg_server_private/g' /etc/wireguard/wg0.conf
+wget --no-cache -P /etc/wireguard $_raw_base/install/server-key
+sed -i 's/<server-privatekey>/'"$_wg_server_private"'/g' /etc/wireguard/server-key
+sed -i 's/<server-privatekey>/'"$_wg_server_private"'/g' /etc/wireguard/server-key
 
 
 
@@ -96,7 +96,7 @@ sed -i 's/<server-privatekey>/'"$_wg_server_private"'/g' /etc/wireguard/wg0.conf
 chown -R root:root /etc/wireguard
 chmod -R og-rwx /etc/wireguard
 systemctl enable wg-quick@wg0.service
-#systemctl start wg-quick@wg0.service
+systemctl start wg-quick@wg0.service
 
 IP=$(hostname -I | cut -f1 -d ' ')
 log "Installation complete
