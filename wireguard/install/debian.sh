@@ -64,7 +64,7 @@ locale-gen en_US.UTF-8
 
 runcmd 'apt-get update'
 export DEBIAN_FRONTEND=noninteractive
-runcmd 'apt-get install -y --no-install-recommends wireguard-tools'
+runcmd 'apt-get install -y --no-install-recommends wireguard-tools iptables'
 
 # Enable IP-forwarding
 log "Enable IP-forwarding..."
