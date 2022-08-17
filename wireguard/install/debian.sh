@@ -84,7 +84,7 @@ echo -e "Clé privée : $_wg_server_private\nClé public : $_wg_server_public" >
 chown -R root:root /etc/wireguard
 chmod -R og-rwx /etc/wireguard
 systemctl enable wg-quick@wg0.service
-systemctl start wg-quick@wg0.service
+#systemctl start wg-quick@wg0.service
 
 IP=$(hostname -I | cut -f1 -d ' ')
 log "Installation complete
