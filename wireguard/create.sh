@@ -94,7 +94,7 @@ done
 # Check user settings or set defaults
 _ctid=${_ctid:-`pvesh get /cluster/nextid`}
 _cpu_cores=${_cpu_cores:-1}
-_disk_size=${_disk_size:-2G}
+_disk_size=${_disk_size:-512}
 _host_name=${_host_name:-wireguard}
 _bridge=${_bridge:-vmbr0}
 _memory=${_memory:-512}
