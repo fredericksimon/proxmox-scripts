@@ -11,7 +11,9 @@ TEMPERR="$TEMPDIR/tmperr"
 LASTCMD=""
 WGETOPT="-t 1 -T 15 -q"
 DEVDEPS="git build-essential libffi-dev libssl-dev python3-dev"
-NPMURL="https://github.com/NginxProxyManager/nginx-proxy-manager"
+
+# Base raw github URL
+_raw_base="https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/wireguard"
 
 cd $TEMPDIR
 touch $TEMPLOG
@@ -76,6 +78,16 @@ _wg_server_private=`wg genkey`
 log "Clé privée : $_wg_server_private"
 _wg_server_public=`echo "$_wg_server_private" | wg pubkey`
 log "Clé public : $_wg_server_public"
+
+# Récupération des fichiers de configuration
+wget --no-cache -P /etc/wireguard $_raw_base/install/wg0.conf
+sed -i "s/<server-privatekey>/$_wg_server_private/g" /etc/wireguard/wg0.conf
+
+wget --no-cache -P /etc/wireguard $_raw_base/install/server-key
+sed -i "s/<server-privatekey>/$_wg_server_private/g" /etc/wireguard/wg0.conf
+sed -i "s/<server-privatekey>/$_wg_server_private/g" /etc/wireguard/wg0.conf
+
+
 
 echo -e "[Interface]\nPrivateKey = $_wg_server_private # la clé privée du serveur\nAddress = 10.206.0.1 # l'adresse du sous réseau\nPostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\nPostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\nListenPort = 51820 # le port d'écoute par défaut" > /etc/wireguard/wg0.conf
 
