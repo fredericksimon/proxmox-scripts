@@ -14,7 +14,7 @@ DEVDEPS="git build-essential libffi-dev libssl-dev python3-dev"
 
 # Base raw github URL
 _raw_base="https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/wireguard"
-
+           
 cd $TEMPDIR
 touch $TEMPLOG
 
@@ -89,14 +89,14 @@ sed -i "s/<server-privatekey>/$_wg_server_private/g" /etc/wireguard/wg0.conf
 
 
 
-echo -e "[Interface]\nPrivateKey = $_wg_server_private # la clé privée du serveur\nAddress = 10.206.0.1 # l'adresse du sous réseau\nPostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\nPostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\nListenPort = 51820 # le port d'écoute par défaut" > /etc/wireguard/wg0.conf
+#echo -e "[Interface]\nPrivateKey = $_wg_server_private # la clé privée du serveur\nAddress = 10.206.0.1 # l'adresse du sous réseau\nPostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\nPostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\nListenPort = 51820 # le port d'écoute par défaut" > /etc/wireguard/wg0.conf
 
-echo -e "Clé privée : $_wg_server_private\nClé public : $_wg_server_public" > /etc/wireguard/server-key
+#echo -e "Clé privée : $_wg_server_private\nClé public : $_wg_server_public" > /etc/wireguard/server-key
 
 chown -R root:root /etc/wireguard
 chmod -R og-rwx /etc/wireguard
 systemctl enable wg-quick@wg0.service
-systemctl start wg-quick@wg0.service
+#systemctl start wg-quick@wg0.service
 
 IP=$(hostname -I | cut -f1 -d ' ')
 log "Installation complete
