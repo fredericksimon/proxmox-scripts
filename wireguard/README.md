@@ -20,7 +20,7 @@ curl -sL https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/w
 | --bridge      | vmbr0                     | bridge used for eth0                                   |
 | --cores       | 1                         | number of cpu cores                                    |
 | --disksize    | 2G                        | size of disk                                           |
-| --hostname    | nginx-proxy-manager       | hostname of the container                              |
+| --hostname    | wireguard                 | hostname of the container                              |
 | --memory      | 512                       | amount of memory                                       |
 | --storage     | local-lvm                 | storage location for container disk                    |
 | --templates   | local                     | storage location for templates                         |
