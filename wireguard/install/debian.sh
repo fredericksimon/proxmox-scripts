@@ -81,11 +81,11 @@ log "Clé public : $_wg_server_public"
 
 # Récupération des fichiers de configuration
 wget --no-cache -P /etc/wireguard $_raw_base/install/wg0.conf
-sed -i "s/<server-privatekey>/$_wg_server_private/g" /etc/wireguard/wg0.conf
+sed -i 's/<server-privatekey>/'"$_wg_server_private"'/g' /etc/wireguard/wg0.conf
 
-wget --no-cache -P /etc/wireguard $_raw_base/install/server-key
-sed -i "s/<server-privatekey>/$_wg_server_private/g" /etc/wireguard/wg0.conf
-sed -i "s/<server-privatekey>/$_wg_server_private/g" /etc/wireguard/wg0.conf
+#wget --no-cache -P /etc/wireguard $_raw_base/install/server-key
+#sed -i 's/<server-privatekey>/$_wg_server_private/g' /etc/wireguard/wg0.conf
+#sed -i 's/<server-privatekey>/$_wg_server_private/g' /etc/wireguard/wg0.conf
 
 
 
