@@ -64,11 +64,51 @@ locale-gen en_US.UTF-8
 
 export DEBIAN_FRONTEND=noninteractive
 
-apt-get update && apt install -y -q --no-install-recommends build-essential libcairo2-dev libjpeg62-turbo-dev libpng-dev libtool-bin uuid-dev libossp-uuid-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev freerdp2-dev libpango1.0-dev libssh2-1-dev libtelnet-dev libvncserver-dev libwebsockets-dev libpulse-dev libssl-dev libvorbis-dev libwebp-dev tomcat9
+apt-get update && apt install -y -q build-essential libcairo2-dev libjpeg62-turbo-dev libpng-dev libtool-bin uuid-dev libossp-uuid-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev freerdp2-dev libpango1.0-dev libssh2-1-dev libtelnet-dev libvncserver-dev libwebsockets-dev libpulse-dev libssl-dev libvorbis-dev libwebp-dev tomcat9
 
 log "Settings Tomacat 9 daemon"
 # Start and enable tomcat9
-#systemctl enable --now tomcat9
+systemctl enable --now tomcat9
+
+log "Install guacamole server 1.4"
+
+log "> Download guacamole server 1.4"
+cd /tmp
+wget https://dlcdn.apache.org/guacamole/1.4.0/source/guacamole-server-1.4.0.tar.gz
+tar -xzf guacamole-server-1.4.0.tar.gz
+
+log "> Change working directory"
+cd guacamole-server-1.4.0/
+
+log "> configure Guacamole server installation and verify system requirements"
+./configure --with-systemd-dir=/etc/systemd/system/ --disable-dependency-tracking
+
+log "> Compiling the source code"
+make
+
+log "> Make Guacamole server"
+make install
+
+log "> Update symbolic links of the system libraries"
+ldconfig
+
+log "> Reload the systemd manager, and apply the new systemd service (guacd)"
+systemctl daemon-reload
+
+log "> Start and enable guacd"
+systemctl enable --now guacd
+
+log "> Verify guacd"
+systemctl status guacd
+
+log "> Update Tomcat default path"
+echo GUACAMOLE_HOME=/etc/guacamole >> /etc/default/tomcat9
+
+log "> Create folder and conf file"
+mkdir -p /etc/guacamole/{extensions,lib}
+touch /etc/guacamole/{guacamole.properties,guacd.conf}
+
+
 
 # log "Setting up wiregard enviroment"
 # _wg_server_private=`wg genkey`
