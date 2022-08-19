@@ -68,8 +68,7 @@ apt-get update && apt install -y -q --no-install-recommends build-essential libc
 
 log "Settings Tomacat 9 daemon"
 # Start and enable tomcat9
-systemctl enable --now tomcat9
-
+#systemctl enable --now tomcat9
 
 # log "Setting up wiregard enviroment"
 # _wg_server_private=`wg genkey`
