@@ -114,11 +114,23 @@ log "> Create folder and conf file"
 mkdir -p /etc/guacamole/{extensions,lib}
 touch /etc/guacamole/{guacamole.properties,guacd.conf}
 
+# ------- Mariadb -------
 log "Install mariadb server"
-apt-get install mariadb-server -y
 cd /tmp
+
+# Install mariadb server package
+apt-get install mariadb-server -y
+
+# MySQL/J connector
+wget https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-java_8.0.30-1debian11_all.deb
+dpkg -i mysql-connector-java_8.0.30-1debian11_all.deb 
+cp /usr/share/java/mysql-connector-java-8.0.30.jar /etc/guacamole/lib/
+
+# Jdbc Auth connector
 wget https://dlcdn.apache.org/guacamole/1.4.0/binary/guacamole-auth-jdbc-1.4.0.tar.gz
 tar -xf guacamole-auth-jdbc-1.4.0.tar.gz
+cd guacamole-auth-jdbc-1.4.0/mysql/
+cp guacamole-auth-jdbc-mysql-1.4.0.jar /etc/guacamole/extensions/guacamole-auth-jdbc-mysql.jar
 
 ## Define MySQL root password
 MYSQL_ROOT_PW=NBtp8z5VWIqTlktD
@@ -135,9 +147,38 @@ echo "grant index, drop, create, select, insert, update, delete, alter, lock tab
 ## Set MySQL root password in MySQL
 echo "SET Password FOR 'root'@localhost = PASSWORD('$MYSQL_ROOT_PW') ; FLUSH PRIVILEGES;" | mysql -u root
    
-mysql -u root -p$MYSQL_ROOT_PW guacamole_db < guacamole-auth-jdbc-1.4.0/mysql/schema/001-create-schema.sql 
-mysql -u root -p$MYSQL_ROOT_PW guacamole_db < guacamole-auth-jdbc-1.4.0/mysql/schema/002-create-admin-user.sql 
+mysql -u root -p$MYSQL_ROOT_PW guacamole_db < schema/001-create-schema.sql 
+mysql -u root -p$MYSQL_ROOT_PW guacamole_db < schema/002-create-admin-user.sql 
 
+
+echo -e "mysql-hostname: localhost\nmysql-port: 3306\nmysql-database: guacamole_db\nmysql-username: guacamole_user\nmysql-password: $MYSQL_GUACAMOLE_PW" | tee /etc/guacamole/guacamole.properties
+
+echo -e "[server]\nbind_host = 0.0.0.0\nbind_port = 4822\n" | tee /etc/guacamole/guacd.conf
+
+systemctl restart guacd
+systemctl restart tomcat9
+
+cd /tmp
+wget --no-cache -O /var/lib/tomcat9/webapps/guacamole.war https://dlcdn.apache.org/guacamole/1.4.0/binary/guacamole-1.4.0.war 
+
+# ------- Apache -------
+
+apt-get -y install apache2
+
+a2enmod proxy proxy_wstunnel proxy_http rewrite
+            
+echo -e "<VirtualHost *:80>\n    ServerName guacamole\n    ServerAlias guacamole\n    ErrorLog /var/log/apache2/example.io-error.log\n    CustomLog /var/log/apache2/example.io-access.log combined\n    <Location /guacamole/>\n        Order allow,deny\n        Allow from all\n        ProxyPass http://127.0.0.1:8080/guacamole/ flushpackets=on\n        ProxyPassReverse http://127.0.0.1:8080/guacamole/\n    </Location>\n    <Location /guacamole/websocket-tunnel>\n        Order allow,deny\n        Allow from all\n        ProxyPass ws://127.0.0.1:8080/guacamole/websocket-tunnel\n        ProxyPassReverse ws://127.0.0.1:8080/guacamole/websocket-tunnel\n    </Location>\n</VirtualHost>\n" | tee /etc/apache2/sites-available/guacamole.conf 
+
+# activate guacamole.conf
+a2ensite guacamole.conf
+
+# verify apache2 configuration
+apachectl configtest
+
+
+sed '/^<\/Host>/i before=me' /etc/tomcat9/server.xml
+
+sed -i 's,</Host>,<Valve className="org.apache.catalina.valves.RemoteIpValve" internalProxies="127.0.0.1" remoteIpHeader="x-forwarded-for"  remoteIpProxiesHeader="x-forwarded-by" protocolHeader="x-forwarded-proto" /></Host>,g' /etc/tomcat9/server.xml
 
 # log "Setting up wiregard enviroment"
 # _wg_server_private=`wg genkey`
