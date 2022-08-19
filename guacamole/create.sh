@@ -31,7 +31,7 @@ function error {
 }
 
 # Base raw github URL
-_raw_base="https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/bitwarden"
+_raw_base="https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/guacamole"
 
 # Operating system
 _os_type=debian
@@ -95,9 +95,9 @@ done
 _ctid=${_ctid:-`pvesh get /cluster/nextid`}
 _cpu_cores=${_cpu_cores:-1}
 _disk_size=${_disk_size:-2G}
-_host_name=${_host_name:-bitwarden}
+_host_name=${_host_name:-guacamole}
 _bridge=${_bridge:-vmbr0}
-_memory=${_memory:-512}
+_memory=${_memory:-1024}
 _swap=${_swap:-0}
 _storage=${_storage:-local-lvm}
 _storage_template=${_storage_template:-local}

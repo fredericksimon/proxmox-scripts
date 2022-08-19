@@ -13,7 +13,7 @@ WGETOPT="-t 1 -T 15 -q"
 DEVDEPS="git build-essential libffi-dev libssl-dev python3-dev"
 
 # Base raw github URL
-_raw_base="https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/bitwarden"
+_raw_base="https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/guacamole"
            
 cd $TEMPDIR
 touch $TEMPLOG
@@ -62,10 +62,16 @@ echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 locale-gen en_US.UTF-8
 
-runcmd 'apt-get update'
 export DEBIAN_FRONTEND=noninteractive
 
-# # On configure wireguard
+apt-get update && apt install build-essential libcairo2-dev libjpeg62-turbo-dev libpng-dev libtool-bin uuid-dev libossp-uuid-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev freerdp2-dev libpango1.0-dev libssh2-1-dev libtelnet-dev libvncserver-dev libwebsockets-dev libpulse-dev libssl-dev libvorbis-dev libwebp-dev tomcat9
+
+log "Settings Tomacat 9 Sdaemon"
+# Start and enable tomcat9
+sudo systemctl enable --now tomcat9
+
+# Verify tomcat9
+sudo systemctl status tomcat9
 
 # log "Setting up wiregard enviroment"
 # _wg_server_private=`wg genkey`

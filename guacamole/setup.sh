@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
-TMP=/tmp/wiregard_install.sh
-URL=https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/bitwarden/install
+TMP=/tmp/guacamole_install.sh
+URL=https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/guacamole/install
 
 if [ "$(uname)" != "Linux" ]; then
   echo "OS NOT SUPPORTED"
