@@ -179,7 +179,8 @@ _pct_options=(
   -rootfs $_rootfs,size=$_disk_size
   -storage $_storage
   -swap $_swap
-  -tags npm
+  -tags guacamole
+  -features nesting=1
 )
 pct create $_ctid "$_storage_template:vztmpl/$_template" ${_pct_options[@]} &>/dev/null \
   || error "A problem occured while creating LXC container."
