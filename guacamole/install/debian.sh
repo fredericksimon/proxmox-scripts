@@ -66,12 +66,10 @@ export DEBIAN_FRONTEND=noninteractive
 
 apt-get update && apt install -y -q --no-install-recommends build-essential libcairo2-dev libjpeg62-turbo-dev libpng-dev libtool-bin uuid-dev libossp-uuid-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev freerdp2-dev libpango1.0-dev libssh2-1-dev libtelnet-dev libvncserver-dev libwebsockets-dev libpulse-dev libssl-dev libvorbis-dev libwebp-dev tomcat9
 
-log "Settings Tomacat 9 Sdaemon"
+log "Settings Tomacat 9 daemon"
 # Start and enable tomcat9
 systemctl enable --now tomcat9
 
-# Verify tomcat9
- systemctl status tomcat9
 
 # log "Setting up wiregard enviroment"
 # _wg_server_private=`wg genkey`
