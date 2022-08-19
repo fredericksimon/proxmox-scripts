@@ -12,6 +12,12 @@ LASTCMD=""
 WGETOPT="-t 1 -T 15 -q"
 DEVDEPS="git build-essential libffi-dev libssl-dev python3-dev"
 
+## Define MySQL root password
+MYSQL_ROOT_PW=NBtp8z5VWIqTlktD
+ 
+## Define MySQL lilac password
+MYSQL_GUACAMOLE_PW=ZpXmgkxrFEq3Xqdt
+
 # Base raw github URL
 _raw_base="https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/guacamole"
            
@@ -108,6 +114,29 @@ log "> Create folder and conf file"
 mkdir -p /etc/guacamole/{extensions,lib}
 touch /etc/guacamole/{guacamole.properties,guacd.conf}
 
+log "Install mariadb server"
+apt-get install mariadb-server -y
+cd /tmp
+wget https://dlcdn.apache.org/guacamole/1.4.0/binary/guacamole-auth-jdbc-1.4.0.tar.gz
+tar -xf guacamole-auth-jdbc-1.4.0.tar.gz
+
+## Define MySQL root password
+MYSQL_ROOT_PW=NBtp8z5VWIqTlktD
+ 
+## Define MySQL lilac password
+MYSQL_GUACAMOLE_PW=ZpXmgkxrFEq3Xqdt
+
+#mysql -u root -pNBtp8z5VWIqTlktD
+echo "CREATE DATABASE IF NOT EXISTS guacamole_db;" | mysql -u root
+
+### Create lilac user with password
+echo "grant index, drop, create, select, insert, update, delete, alter, lock tables on guacamole_db.* to 'guacamole_user'@'localhost' identified by '$MYSQL_GUACAMOLE_PW';" | mysql -u root
+
+## Set MySQL root password in MySQL
+echo "SET Password FOR 'root'@localhost = PASSWORD('$MYSQL_ROOT_PW') ; FLUSH PRIVILEGES;" | mysql -u root
+   
+mysql -u root -p$MYSQL_ROOT_PW guacamole_db < guacamole-auth-jdbc-1.4.0/mysql/schema/001-create-schema.sql 
+mysql -u root -p$MYSQL_ROOT_PW guacamole_db < guacamole-auth-jdbc-1.4.0/mysql/schema/002-create-admin-user.sql 
 
 
 # log "Setting up wiregard enviroment"
