@@ -186,7 +186,7 @@ _pct_options=(
   -hostname $_host_name
   -cores $_cpu_cores
   -memory $_memory
-  -net0 name=eth0,bridge=$_bridge,ip=$-ip,gw=$_gw
+  -net0 name=eth0,bridge=$_bridge,ip=$_ip,gw=$_gw
   -onboot 1
   -ostype $_os_type
   -rootfs $_rootfs,size=$_disk_size
