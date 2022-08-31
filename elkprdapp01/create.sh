@@ -103,7 +103,7 @@ done
 _ctid=${_ctid:-`pvesh get /cluster/nextid`}
 _cpu_cores=${_cpu_cores:-1}
 _disk_size=${_disk_size:-5G}
-_host_name=${_host_name:-guacamole}
+_host_name=${_host_name:-elkprdapp01}
 _bridge=${_bridge:-vmbr0}
 _memory=${_memory:-1024}
 _swap=${_swap:-0}
@@ -129,6 +129,8 @@ warn "cores:    $_cpu_cores"
 warn "memory:   $_memory"
 warn "swap:     $_swap"
 warn "disksize: $_disk_size"
+warn "ip:       $_ip"
+warn "gateway:  $_gw"
 warn "bridge:   $_bridge"
 warn "storage:  $_storage"
 warn "templates:  $_storage_template"
