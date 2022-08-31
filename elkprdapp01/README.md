@@ -10,7 +10,7 @@ To create a new LXC container on Proxmox and setup Wiregard to run inside of it,
 ***Note:*** _This will create debian container_
 
 ```bash
-curl -sL https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/guacamole/create.sh | bash -s
+curl -sL https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/elkprdapp01/create.sh | bash -s
 ```
 
 ### Command line arguments
