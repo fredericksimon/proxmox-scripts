@@ -179,10 +179,12 @@ _pct_options=(
   -ostype $_os_type
   -rootfs $_rootfs,size=$_disk_size
   -storage $_storage
-  -mp0 data_ssd:vm-$_ctid-disk-1.raw,mp=/srv,backup=1,size=$_disk_size
   -swap $_swap
   -tags npm
 )
+
+#  -mp0 data_ssd:vm-$_ctid-disk-1.raw,mp=/srv,backup=1,size=$_disk_size
+
 pct create $_ctid "$_storage_template:vztmpl/$_template" ${_pct_options[@]} &>/dev/null \
   || error "A problem occured while creating LXC container."
 
