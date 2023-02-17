@@ -64,14 +64,20 @@ locale-gen en_US.UTF-8
 
 runcmd 'apt-get update'
 export DEBIAN_FRONTEND=noninteractive
-runcmd 'apt-get install -y --no-install-recommends nfs-kernel-server'
+runcmd 'apt-get install -y --no-install-recommends samba'
+
+runcmd 'echo -e "[partage]\n\tcomment = partage video\n\tpath = /srv\n\tguest ok = no\n\tread only = no\n\tbrowseable = yes\n\tvalid users = @partage" > /etc/samba/smb.conf'
+runcmd 'groupadd partage && adduser --group partage fred'
+runcmd 'pass=emilie'
+runcmd '(echo "$pass"; echo "$pass") | smbpasswd -s -a fred)'
 
 runcmd 'mkdir -p /srv'
-runcmd 'chown nobody:nogroup /srv'
-runcmd 'echo "/srv      0.0.0.0/0(rw,sync,root_squash,no_subtree_check)" >> /etc/exports'
-runcmd 'exportfs -a'
+runcmd 'chgrp -R /srv'
+runcmd 'chmod -R g+rw /srv'
 
-systemctl enable --now nfs-kernel-server.service
+
+
+systemctl enable --now smbd
 
 IP=$(hostname -I | cut -f1 -d ' ')
 log "Installation complete"
