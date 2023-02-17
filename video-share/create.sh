@@ -95,7 +95,7 @@ done
 _ctid=${_ctid:-`pvesh get /cluster/nextid`}
 _cpu_cores=${_cpu_cores:-1}
 _disk_size=${_disk_size:-2G}
-_host_name=${_host_name:-wireguard}
+_host_name=${_host_name:-videoshare}
 _bridge=${_bridge:-vmbr0}
 _memory=${_memory:-512}
 _swap=${_swap:-0}
@@ -127,13 +127,6 @@ echo ""
 
 sleep 10
 
-# Install the kernel headers and wireguard to pve
-info "Installing kernel headers..."
-apt -y install pve-headers wireguard
-
-# Enable the kernel module
-modprobe wireguard
-if ! grep -Fxq "wireguard" /etc/modules-load.d/modules.conf; then echo "wireguard" >> /etc/modules-load.d/modules.conf; fi
 
 # Download latest LXC template
 info "Updating LXC template list..."
@@ -186,6 +179,7 @@ _pct_options=(
   -ostype $_os_type
   -rootfs $_rootfs,size=$_disk_size
   -storage $_storage
+  -mp0 volume=data_ssd:$_disk_size,mp=/srv,backup=1,size=$_disk_size
   -swap $_swap
   -tags npm
 )
