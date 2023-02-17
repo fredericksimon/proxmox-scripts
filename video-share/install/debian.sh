@@ -65,11 +65,15 @@ locale-gen en_US.UTF-8
 runcmd 'apt-get update'
 export DEBIAN_FRONTEND=noninteractive
 runcmd 'apt-get install -y --no-install-recommends samba'
-
+echo "---- Configuration de samba -----"
 runcmd 'echo -e "[partage]\n\tcomment = partage video\n\tpath = /srv\n\tguest ok = no\n\tread only = no\n\tbrowseable = yes\n\tvalid users = @partage\n\tcreate mask = 0660\n\tdirectory mask = 0770\n\tforce group = partage" > /etc/samba/smb.conf'
+
+echo "---- Création utilisateur et du groupe partage -----"
 runcmd 'groupadd partage && useradd --group partage fred'
+echo "---- Ajout du mot de passe à smb"
 runcmd 'pass=emilie && (echo "$pass"; echo "$pass") | smbpasswd -s -a fred'
 
+echo "---- création du partage et affectation des droits"
 runcmd 'mkdir -p /srv && chgrp -R partage /srv && chmod -R g+rw /srv'
 #runcmd 'systemctl --now enable smbd'
 
