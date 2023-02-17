@@ -181,7 +181,6 @@ _pct_options=(
   -storage $_storage
   -swap $_swap
   -tags videoshare
-  -unprivileged 1
 )
 
 #  -mp0 data_ssd:vm-$_ctid-disk-1.raw,mp=/srv,backup=1,size=$_disk_size
