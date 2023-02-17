@@ -66,14 +66,14 @@ runcmd 'apt-get update'
 export DEBIAN_FRONTEND=noninteractive
 runcmd 'apt-get install -y --no-install-recommends samba'
 
-runcmd 'echo -e "[partage]\n\tcomment = partage video\n\tpath = /srv\n\tguest ok = no\n\tread only = no\n\tbrowseable = yes\n\tvalid users = @partage" > /etc/samba/smb.conf'
-runcmd 'groupadd partage && adduser --group partage fred'
-runcmd 'pass=emilie'
-runcmd '(echo "$pass"; echo "$pass") | smbpasswd -s -a fred)'
+#runcmd 'echo -e "[partage]\n\tcomment = partage video\n\tpath = /srv\n\tguest ok = no\n\tread only = no\n\tbrowseable = yes\n\tvalid users = @partage" > /etc/samba/smb.conf'
+#runcmd 'groupadd partage && adduser --group partage fred'
+#runcmd 'pass=emilie'
+#runcmd '(echo "$pass"; echo "$pass") | smbpasswd -s -a fred)'
 
-runcmd 'mkdir -p /srv'
-runcmd 'chgrp -R /srv'
-runcmd 'chmod -R g+rw /srv'
+#runcmd 'mkdir -p /srv'
+#runcmd 'chgrp -R /srv'
+#runcmd 'chmod -R g+rw /srv'
 
 #sudo systemctl unmask samba
 #sudo systemctl enable samba
