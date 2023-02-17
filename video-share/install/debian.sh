@@ -71,7 +71,7 @@ runcmd 'groupadd partage && useradd --group partage fred'
 runcmd 'pass=emilie && (echo "$pass"; echo "$pass") | smbpasswd -s -a fred'
 
 runcmd 'mkdir -p /srv && chgrp -R partage /srv && chmod -R g+rw /srv'
-runcmd 'systemctl --now enable smbd'
+#runcmd 'systemctl --now enable smbd'
 
 IP=$(hostname -I | cut -f1 -d ' ')
 log "Installation complete"
