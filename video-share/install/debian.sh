@@ -65,11 +65,13 @@ locale-gen en_US.UTF-8
 runcmd 'apt-get update'
 export DEBIAN_FRONTEND=noninteractive
 runcmd 'apt-get install -y --no-install-recommends nfs-kernel-server'
-echo "/home               0.0.0.0/0(rw,sync,root_squash,no_subtree_check)" >> /etc/exports
 
-exportfs -a
+runcmd 'mkdir -p /srv'
+runcmd 'chown nobody:nogroup /srv'
+runcmd 'echo "/srv      0.0.0.0/0(rw,sync,root_squash,no_subtree_check)" >> /etc/exports'
+runcmd 'exportfs -a'
 
-#systemctl enable --now nfs-server.service
+systemctl enable --now nfs-kernel-server.service
 
 IP=$(hostname -I | cut -f1 -d ' ')
 log "Installation complete"
