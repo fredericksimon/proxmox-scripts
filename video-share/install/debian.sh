@@ -66,13 +66,12 @@ runcmd 'apt-get update'
 export DEBIAN_FRONTEND=noninteractive
 runcmd 'apt-get install -y --no-install-recommends samba'
 
-#runcmd 'echo -e "[partage]\n\tcomment = partage video\n\tpath = /srv\n\tguest ok = no\n\tread only = no\n\tbrowseable = yes\n\tvalid users = @partage\n\tcreate mask = 0660\n\tdirectory mask = 0770\n\tforce group = partage" > /etc/samba/smb.conf'
-#runcmd 'groupadd partage && useradd --group partage fred'
-#runcmd 'pass=emilie && (echo "$pass"; echo "$pass") | smbpasswd -s -a fred'
+runcmd 'echo -e "[partage]\n\tcomment = partage video\n\tpath = /srv\n\tguest ok = no\n\tread only = no\n\tbrowseable = yes\n\tvalid users = @partage\n\tcreate mask = 0660\n\tdirectory mask = 0770\n\tforce group = partage" > /etc/samba/smb.conf'
+runcmd 'groupadd partage && useradd --group partage fred'
+runcmd 'pass=emilie && (echo "$pass"; echo "$pass") | smbpasswd -s -a fred'
 
-#runcmd 'mkdir -p /srv && chgrp -R partage /srv && chmod -R g+rw /srv'
-systemctl --now enable smbd
-systemctl restart smbd
+runcmd 'mkdir -p /srv && chgrp -R partage /srv && chmod -R g+rw /srv'
+runcmd 'systemctl --now enable smbd'
 
 IP=$(hostname -I | cut -f1 -d ' ')
 log "Installation complete"
