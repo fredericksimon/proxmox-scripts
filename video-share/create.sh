@@ -31,7 +31,7 @@ function error {
 }
 
 # Base raw github URL
-_raw_base="https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/wireguard"
+_raw_base="https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/video-share"
 
 # Operating system
 _os_type=debian
