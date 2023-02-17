@@ -66,7 +66,7 @@ runcmd 'apt-get update'
 export DEBIAN_FRONTEND=noninteractive
 runcmd 'apt-get install -y --no-install-recommends samba'
 echo "---- Configuration de samba -----"
-runcmd 'echo -e "[partage]\n\tcomment = partage video\n\tpath = /srv\n\tguest ok = no\n\tread only = no\n\tbrowseable = yes\n\tvalid users = @partage\n\tcreate mask = 0660\n\tdirectory mask = 0770\n\tforce group = partage" > /etc/samba/smb.conf'
+#runcmd 'echo -e "[partage]\n\tcomment = partage video\n\tpath = /srv\n\tguest ok = no\n\tread only = no\n\tbrowseable = yes\n\tvalid users = @partage\n\tcreate mask = 0660\n\tdirectory mask = 0770\n\tforce group = partage" > /etc/samba/smb.conf'
 
 echo "---- Création utilisateur et du groupe partage -----"
 runcmd 'groupadd partage && useradd --group partage fred'
