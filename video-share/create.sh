@@ -179,7 +179,7 @@ _pct_options=(
   -ostype $_os_type
   -rootfs $_rootfs,size=$_disk_size
   -storage $_storage
-  -mp0 volume=data_ssd:$_disk_size,mp=/srv,backup=1,size=$_disk_size
+  -mp0 volume=data_ssd,mp=/srv,backup=1,size=$_disk_size
   -swap $_swap
   -tags npm
 )
