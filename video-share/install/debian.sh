@@ -75,9 +75,9 @@ runcmd 'mkdir -p /srv'
 runcmd 'chgrp -R /srv'
 runcmd 'chmod -R g+rw /srv'
 
-
-
-systemctl enable --now smbd
+#sudo systemctl unmask samba
+#sudo systemctl enable samba
+#sudo systemctl restart samba
 
 IP=$(hostname -I | cut -f1 -d ' ')
 log "Installation complete"
