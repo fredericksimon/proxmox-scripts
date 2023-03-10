@@ -11,7 +11,16 @@ TEMPERR="$TEMPDIR/tmperr"
 LASTCMD=""
 WGETOPT="-t 1 -T 15 -q"
 DEVDEPS="git build-essential libffi-dev libssl-dev python3-dev"
-          
+
+## Define MySQL root password
+MYSQL_ROOT_PW=NBtp8z5VWIqTlktD
+ 
+## Define MySQL lilac password
+MYSQL_timemachine_PW=ZpXmgkxrFEq3Xqdt
+
+# Base raw github URL
+_raw_base="https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/timemachine"
+           
 cd $TEMPDIR
 touch $TEMPLOG
 
@@ -50,17 +59,37 @@ trapexit() {
   rm -rf /root/.cache
 }
 
+
 # Install dependencies
 log "Installing dependencies"
 
-echo "LC_ALL=fr_FR.UTF-8" >> /etc/environment
-echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen
-echo "LANG=fr_FR.UTF-8" > /etc/locale.conf
-locale-gen fr_FR.UTF-8
+echo "LC_ALL=en_US.UTF-8" >> /etc/environment
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+locale-gen en_US.UTF-8
 
 export DEBIAN_FRONTEND=noninteractive
 
-apt-get update && apt install -y 
+apt-get update && apt install -y -q samba
+
+log "Settings Samba 4 daemon"
+# Start and enable tomcat9
+systemctl enable --now smbd
+
+log "Install timemachine server 1.4"
+
+echo -e "[Timemachine]\n    comment = Time Machine\n    path = /srv/timemachine\n    browseable = yes\n
+    writeable = yes\n    create mask = 0600\n    directory mask = 0700\n    spotlight = yes\n    vfs objects = catia fruit streams_xattr\n    fruit:aapl = yes\n    fruit:time machine = yes\n    fruit:resource = xattr" | tee /etc/samba/smb.conf
+
+mkdir -p /srv/timemachine
+
+adduser fred
+echo -e "emilie\nemilie" | (smbpasswd -s fred)
+echo -e "emilie\nemilie" | (passwd --stdin fred)
+
+
+# Restart tomcat9
+systemctl restart smbd
 
 IP=$(hostname -I | cut -f1 -d ' ')
 log "Installation complete"

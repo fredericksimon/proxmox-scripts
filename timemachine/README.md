@@ -1,4 +1,4 @@
-# guacamole in Proxmox LXC container
+# timemachine in Proxmox LXC container
 
 Many benefits can be gained by using a LXC container compared to a VM. The resources needed to run a LXC container are less than running a VM. Modifing the resouces assigned to the LXC container can be done without having to reboot the container. The serial devices connected to Proxmox can be shared with multiple LXC containers simulatenously.
 
@@ -10,7 +10,7 @@ To create a new LXC container on Proxmox and setup Wiregard to run inside of it,
 ***Note:*** _This will create debian container_
 
 ```bash
-curl -sL https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/elkprdapp01/create.sh | bash -s
+curl -sL https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/timemachine/create.sh | bash -s
 ```
 
 ### Command line arguments
@@ -20,7 +20,7 @@ curl -sL https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/e
 | --bridge      | vmbr0                     | bridge used for eth0                                   |
 | --cores       | 1                         | number of cpu cores                                    |
 | --disksize    | 2G                        | size of disk                                           |
-| --hostname    | guacamole                 | hostname of the container                              |
+| --hostname    | timemachine                 | hostname of the container                              |
 | --memory      | 512                       | amount of memory                                       |
 | --storage     | local-lvm                 | storage location for container disk                    |
 | --templates   | local                     | storage location for templates                         |
@@ -29,7 +29,7 @@ curl -sL https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/e
 you can set these parameters by appending ` -- <parameter> <value>` like:
 
 ```bash
-curl -sL https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/guacamole/create.sh | bash -s -- --cores 4
+curl -sL https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/timemachine/create.sh | bash -s -- --cores 4
 ```
 
 ### Console
@@ -44,7 +44,7 @@ If you are not using proxmox or want to install this on a existing Alpine box, y
 ***Note:*** _Only Alpine, Debian and Ubuntu are currently supported by this script_
 
 ```bash
-wget --no-cache -qO - https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/guacamole/setup.sh | sh
+wget --no-cache -qO - https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/timemachine/setup.sh | sh
 ```
 
 ## Thanks

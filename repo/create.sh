@@ -31,11 +31,11 @@ function error {
 }
 
 # Base raw github URL
-_raw_base="https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/elkprdapp01"
+_raw_base="https://raw.githubusercontent.com/fredericksimon/proxmox-scripts/main/repo"
 
 # Operating system
 _os_type=debian
-_os_version=11
+_os_version=10
 # System architecture
 _arch=$(dpkg --print-architecture)
 
@@ -84,14 +84,6 @@ while [[ $# -gt 0 ]]; do
       _swap=$2
       shift
       ;;
-    --ip)
-      _swap=$2
-      shift
-      ;;
-    --gw)
-      _swap=$2
-      shift
-      ;;
     *)
       error "Unrecognized option $1"
       ;;
@@ -102,16 +94,13 @@ done
 # Check user settings or set defaults
 _ctid=${_ctid:-`pvesh get /cluster/nextid`}
 _cpu_cores=${_cpu_cores:-1}
-_disk_size=${_disk_size:-5G}
-_host_name=${_host_name:-elkprdapp01}
+_disk_size=${_disk_size:-2G}
+_host_name=${_host_name:-repo}
 _bridge=${_bridge:-vmbr0}
-_memory=${_memory:-1024}
+_memory=${_memory:-512}
 _swap=${_swap:-0}
 _storage=${_storage:-local-lvm}
 _storage_template=${_storage_template:-local}
-_ip=${_ip:-192.168.0.100/24}
-_gw=${_gw:-192.169.0.254}
-
 
 # Test if ID is in use
 if pct status $_ctid &>/dev/null; then
@@ -129,8 +118,6 @@ warn "cores:    $_cpu_cores"
 warn "memory:   $_memory"
 warn "swap:     $_swap"
 warn "disksize: $_disk_size"
-warn "ip:       $_ip"
-warn "gateway:  $_gw"
 warn "bridge:   $_bridge"
 warn "storage:  $_storage"
 warn "templates:  $_storage_template"
@@ -186,14 +173,13 @@ _pct_options=(
   -hostname $_host_name
   -cores $_cpu_cores
   -memory $_memory
-  -net0 name=eth0,bridge=$_bridge,ip=$_ip,gw=$_gw
+  -net0 name=eth0,bridge=$_bridge,ip=dhcp
   -onboot 1
   -ostype $_os_type
   -rootfs $_rootfs,size=$_disk_size
   -storage $_storage
   -swap $_swap
-  -tags guacamole
-  -features nesting=1
+  -tags npm
 )
 pct create $_ctid "$_storage_template:vztmpl/$_template" ${_pct_options[@]} &>/dev/null \
   || error "A problem occured while creating LXC container."
@@ -207,4 +193,4 @@ EOF
 info "Setting up LXC container..."
 pct start $_ctid
 sleep 5
-pct exec $_ctid -- sh -c "wget --no-cache -qO - $_raw_base/debian.sh | sh"
+pct exec $_ctid -- sh -c "wget --no-cache -qO - $_raw_base/setup.sh | sh"
