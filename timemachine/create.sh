@@ -99,7 +99,7 @@ _host_name=${_host_name:-timemachine}
 _bridge=${_bridge:-vmbr1}
 _memory=${_memory:-1024}
 _swap=${_swap:-0}
-_storage=${_storage:-zfs_pool}
+_storage=${_storage:-local}
 _storage_template=${_storage_template:-local}
 
 # Test if ID is in use
